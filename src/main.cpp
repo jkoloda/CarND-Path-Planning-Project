@@ -175,19 +175,19 @@ bool is_lane_free(int lane, const vector<vector<double>> sensor_fusion, int ahea
       double check_speed = sqrt(vx*vx + vy*vy);
       double check_car_s = sensor_fusion[i][5];
 
-      if (abs(current_s - check_car_s) < 5) {
+      if (abs(current_s - check_car_s) < 10) {
         return false;
       }
 
       // The car is behind
       if (current_s > check_car_s) {
-        // There should be noone 20m behind
-        if (current_s - check_car_s < 20) {
+        // There should be noone close behind
+        if (current_s - check_car_s < 15) {
           return false;
         }
         // After completing take over the car should stay behind
         check_car_s += (double)ahead_steps*0.02*check_speed;
-        if (current_s - check_car_s < 20) {
+        if (ahead_dist - check_car_s < 15) {
           return false;
         }
 
@@ -347,7 +347,7 @@ int main() {
             }
 
             if (too_close == true && ref_vel >= 0.95*target_speed) {
-              cout << target_speed << endl;
+              // cout << target_speed << endl;
               ref_vel -= 0.224;
             } else if (ref_vel < 49.5) {
               ref_vel += 0.224;
